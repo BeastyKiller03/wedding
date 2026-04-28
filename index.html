@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Marco & Jess Wedding Invitation</title>
+
+  <style>
+    :root {
+      --bg: #120d0d;
+      --paper: #f3eadc;
+      --paper-dark: #ded0bc;
+      --ink: #211815;
+      --muted: #6f5d52;
+      --red: #541f25;
+      --green: #1f3a2d;
+      --plum: #3b243d;
+      --gold: #b89b64;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top, rgba(84, 31, 37, 0.45), transparent 35%),
+        radial-gradient(circle at bottom, rgba(31, 58, 45, 0.35), transparent 35%),
+        var(--bg);
+      color: var(--paper);
+    }
+
+    body {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      overflow-x: hidden;
+    }
+
+    .app {
+      width: min(94vw, 430px);
+      min-height: min(760px, 92svh);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .card-area {
+      width: 100%;
+      position: relative;
+      perspective: 1200px;
+    }
+
+    .card {
+      width: 100%;
+      min-height: 535px;
+      border-radius: 18px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.42), transparent 28%),
+        repeating-linear-gradient(
+          90deg,
+          rgba(0,0,0,0.018) 0,
+          rgba(0,0,0,0.018) 1px,
+          transparent 1px,
+          transparent 8px
+        ),
+        var(--paper);
+      color: var(--ink);
+      box-shadow:
+        0 22px 60px rgba(0,0,0,0.42),
+        inset 0 0 0 1px rgba(80, 50, 35, 0.14);
+      padding: 34px 28px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transform-origin: center;
+      transition:
+        opacity 420ms ease,
+        transform 520ms ease;
+    }
+
+    .card::before,
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border: 1px solid rgba(84, 31, 37, 0.18);
+      border-radius: 12px;
+      pointer-events: none;
+    }
+
+    .card::after {
+      inset: 22px;
+      border-color: rgba(184, 155, 100, 0.32);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .fade-out {
+      opacity: 0;
+      transform: translateY(-18px) scale(0.97);
+    }
+
+    .fade-in {
+      animation: fadeIn 520ms ease both;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(22px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .wrapper-card {
+      min-height: 535px;
+      background:
+        linear-gradient(130deg, rgba(255,255,255,0.28), transparent 22%),
+        repeating-linear-gradient(
+          -35deg,
+          rgba(84,31,37,0.08) 0,
+          rgba(84,31,37,0.08) 2px,
+          transparent 2px,
+          transparent 18px
+        ),
+        #e7d8c2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 26px;
+    }
+
+    .wrapper-band {
+      position: absolute;
+      left: -20%;
+      right: -20%;
+      top: 44%;
+      height: 82px;
+      background: linear-gradient(90deg, var(--green), var(--plum), var(--red));
+      transform: rotate(-6deg);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.24);
+      opacity: 0.92;
+    }
+
+    .seal {
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 35% 30%, rgba(255,255,255,0.25), transparent 20%),
+        var(--red);
+      color: #f2dfbf;
+      display: grid;
+      place-items: center;
+      margin: 0 auto;
+      z-index: 2;
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      box-shadow:
+        0 8px 18px rgba(0,0,0,0.3),
+        inset 0 0 0 2px rgba(255,255,255,0.12);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .eyebrow {
+      font-family: Arial, Helvetica, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .names {
+      font-size: clamp(2.35rem, 12vw, 4.3rem);
+      line-height: 0.9;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    .amp {
+      display: block;
+      font-size: 2.25rem;
+      line-height: 1.2;
+      color: var(--red);
+      font-style: italic;
+    }
+
+    .script-note {
+      font-size: 1.04rem;
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 310px;
+      margin: 24px auto 0;
+    }
+
+    .date {
+      margin-top: 30px;
+      font-family: Arial, Helvetica, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.82rem;
+      color: var(--red);
+      line-height: 1.7;
+    }
+
+    .strip {
+      display: inline-block;
+      background: rgba(255,255,255,0.45);
+      border: 1px solid rgba(84,31,37,0.18);
+      padding: 14px 22px;
+      border-radius: 999px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+      font-size: 1.4rem;
+      color: var(--ink);
+    }
+
+    .details-title {
+      font-size: 2.15rem;
+      color: var(--ink);
+      margin-bottom: 22px;
+      font-weight: 400;
+    }
+
+    .details-copy {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.6;
+      max-width: 330px;
+      margin: 0 auto 22px;
+    }
+
+    .info-box {
+      background: rgba(84,31,37,0.08);
+      border: 1px solid rgba(84,31,37,0.18);
+      border-radius: 14px;
+      padding: 16px;
+      margin: 16px auto;
+      max-width: 330px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .info-label {
+      font-family: Arial, Helvetica, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.65rem;
+      color: var(--red);
+      margin-bottom: 7px;
+    }
+
+    .info-main {
+      font-size: 1.12rem;
+      line-height: 1.45;
+      color: var(--ink);
+    }
+
+    .palette {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 18px auto 8px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .swatch {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.6);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.16);
+    }
+
+    .swatch.green { background: #1f3a2d; }
+    .swatch.red { background: #541f25; }
+    .swatch.plum { background: #3b243d; }
+    .swatch.black { background: #161313; }
+    .swatch.brown { background: #4a3328; }
+
+    .controls {
+      width: 100%;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 18px;
+    }
+
+    button,
+    .button-link {
+      appearance: none;
+      border: 1px solid rgba(243, 234, 220, 0.28);
+      background: rgba(243, 234, 220, 0.1);
+      color: var(--paper);
+      padding: 13px 18px;
+      border-radius: 999px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition:
+        transform 180ms ease,
+        background 180ms ease,
+        border-color 180ms ease;
+    }
+
+    button:hover,
+    .button-link:hover {
+      transform: translateY(-1px);
+      background: rgba(243, 234, 220, 0.17);
+      border-color: rgba(243, 234, 220, 0.45);
+    }
+
+    .primary {
+      background: var(--paper);
+      color: var(--ink);
+      border-color: var(--paper);
+    }
+
+    .primary:hover {
+      background: #fff7ea;
+    }
+
+    .progress {
+      margin-top: 14px;
+      font-family: Arial, Helvetica, sans-serif;
+      color: rgba(243, 234, 220, 0.62);
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .footer-note {
+      margin-top: 12px;
+      color: rgba(243, 234, 220, 0.65);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.72rem;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    @media (max-height: 700px) {
+      body {
+        align-items: flex-start;
+        padding-top: 12px;
+      }
+
+      .card {
+        min-height: 480px;
+        padding: 28px 22px;
+      }
+
+      .wrapper-card {
+        min-height: 480px;
+      }
+
+      .details-title {
+        font-size: 1.85rem;
+      }
+
+      .details-copy {
+        font-size: 0.92rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <section class="card-area" aria-live="polite">
+      <article class="card wrapper-card" id="card">
+        <!-- Content is loaded by JavaScript -->
+      </article>
+    </section>
+
+    <div class="controls">
+      <button id="backBtn" type="button">Back</button>
+      <button id="nextBtn" class="primary" type="button">Open</button>
+    </div>
+
+    <div class="progress" id="progressText">Invitation</div>
+
+    <div class="footer-note">
+      Test invite page · Replace text, links, and details before sending.
+    </div>
+  </main>
+
+  <script>
+    /*
+      HOW TO USE:
+      1. Replace the placeholder Google Form link below.
+      2. Replace reception location/details.
+      3. If you want ceremony-only guests to see ceremony info,
+         duplicate this file as ceremony.html and add a ceremony slide.
+    */
+
+    const RSVP_LINK = "https://forms.google.com/YOUR-RSVP-FORM-LINK-HERE";
+
+    const slides = [
+      {
+        type: "wrapper",
+        button: "Open",
+        html: `
+          <div class="wrapper-band"></div>
+          <div class="seal">10·31</div>
+          <p class="eyebrow">Wedding Invitation</p>
+          <h1 class="names">Marco <span class="amp">&</span> Jess</h1>
+          <p class="script-note">Tap to open</p>
+        `
+      },
+      {
+        type: "card",
+        button: "Next",
+        html: `
+          <p class="eyebrow">Together with their families</p>
+          <div class="strip">Marco and Jess</div>
+          <p class="script-note">
+            invite you to celebrate a day of love, family, and joy.
+          </p>
+        `
+      },
+      {
+        type: "card",
+        button: "Next",
+        html: `
+          <p class="eyebrow">You are invited</p>
+          <h1 class="names">Marco Maria <span class="amp">&</span> Jess Arceo</h1>
+          <p class="script-note">invite you to celebrate their love</p>
+          <p class="date">
+            October 31st, 2026<br>
+            four o’clock in the afternoon
+          </p>
+        `
+      },
+      {
+        type: "card",
+        button: "Next",
+        html: `
+          <h2 class="details-title">Details</h2>
+          <p class="details-copy">
+            Marco and Jess will be exchanging vows in a private ceremony
+            surrounded by close family and friends.
+          </p>
+          <p class="details-copy">
+            They would be honored to have you join them afterward
+            for their reception celebration.
+          </p>
+
+          <div class="info-box">
+            <div class="info-label">Reception begins</div>
+            <div class="info-main">3:00 PM</div>
+          </div>
+
+          <div class="info-box">
+            <div class="info-label">Food served</div>
+            <div class="info-main">6:00 PM</div>
+          </div>
+        `
+      },
+      {
+        type: "card",
+        button: "Next",
+        html: `
+          <h2 class="details-title">Attire</h2>
+          <p class="details-copy">
+            Dark romantic semi-formal attire is encouraged.
+          </p>
+          <p class="details-copy">
+            We invite guests to wear deep, moody tones such as forest green,
+            burgundy, wine red, plum, black, charcoal, or dark brown.
+          </p>
+
+          <div class="palette" aria-label="Suggested color palette">
+            <span class="swatch green"></span>
+            <span class="swatch red"></span>
+            <span class="swatch plum"></span>
+            <span class="swatch black"></span>
+            <span class="swatch brown"></span>
+          </div>
+
+          <div class="info-box">
+            <div class="info-label">Halloween note</div>
+            <div class="info-main">
+              Guests are welcome to change into costumes after 8:00 PM.
+            </div>
+          </div>
+        `
+      },
+      {
+        type: "card",
+        button: "Next",
+        html: `
+          <h2 class="details-title">Reception</h2>
+          <p class="details-copy">
+            Join us for dinner, music, and celebration.
+          </p>
+
+          <div class="info-box">
+            <div class="info-label">Location</div>
+            <div class="info-main">
+              Reception location goes here<br>
+              Perris, California
+            </div>
+          </div>
+
+          <div class="info-box">
+            <div class="info-label">Time</div>
+            <div class="info-main">
+              3:00 PM<br>
+              Food served at 6:00 PM
+            </div>
+          </div>
+        `
+      },
+      {
+        type: "card",
+        button: "RSVP",
+        html: `
+          <h2 class="details-title">Kindly Reply</h2>
+          <p class="details-copy">
+            Please RSVP by the third of July.
+          </p>
+
+          <div class="info-box">
+            <div class="info-label">Response</div>
+            <div class="info-main">
+              Gratefully accepts<br>
+              Respectfully declines
+            </div>
+          </div>
+
+          <p class="script-note">
+            Tap RSVP below to submit your response.
+          </p>
+        `
+      }
+    ];
+
+    let currentSlide = 0;
+
+    const card = document.getElementById("card");
+    const nextBtn = document.getElementById("nextBtn");
+    const backBtn = document.getElementById("backBtn");
+    const progressText = document.getElementById("progressText");
+
+    function renderSlide() {
+      const slide = slides[currentSlide];
+
+      card.className = "card fade-in";
+      if (slide.type === "wrapper") {
+        card.classList.add("wrapper-card");
+      }
+
+      card.innerHTML = slide.html;
+
+      backBtn.style.visibility = currentSlide === 0 ? "hidden" : "visible";
+      nextBtn.textContent = slide.button;
+
+      progressText.textContent =
+        currentSlide === 0
+          ? "Invitation"
+          : `${currentSlide} / ${slides.length - 1}`;
+    }
+
+    function goNext() {
+      if (currentSlide === slides.length - 1) {
+        window.open(RSVP_LINK, "_blank");
+        return;
+      }
+
+      card.classList.add("fade-out");
+
+      setTimeout(() => {
+        currentSlide += 1;
+        renderSlide();
+      }, 260);
+    }
+
+    function goBack() {
+      if (currentSlide === 0) return;
+
+      card.classList.add("fade-out");
+
+      setTimeout(() => {
+        currentSlide -= 1;
+        renderSlide();
+      }, 260);
+    }
+
+    nextBtn.addEventListener("click", goNext);
+    backBtn.addEventListener("click", goBack);
+
+    // Lets guests tap the card itself to continue.
+    card.addEventListener("click", () => {
+      if (currentSlide !== slides.length - 1) {
+        goNext();
+      }
+    });
+
+    renderSlide();
+  </script>
+</body>
+</html>
