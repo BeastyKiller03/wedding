@@ -8,15 +8,15 @@
 
   <style>
     :root {
-      --bg: #120d0d;
-      --paper: #f3eadc;
-      --paper-dark: #ded0bc;
-      --ink: #211815;
-      --muted: #6f5d52;
-      --red: #541f25;
-      --green: #1f3a2d;
+      --bg: #100c0d;
+      --paper: #f4eadb;
+      --paper-soft: #eadcc8;
+      --ink: #241817;
+      --muted: #7b685e;
+      --red: #561f29;
+      --green: #1d3a2c;
       --plum: #3b243d;
-      --gold: #b89b64;
+      --gold: #b99b63;
     }
 
     * {
@@ -29,8 +29,9 @@
       min-height: 100%;
       font-family: Georgia, "Times New Roman", serif;
       background:
-        radial-gradient(circle at top, rgba(84, 31, 37, 0.45), transparent 35%),
-        radial-gradient(circle at bottom, rgba(31, 58, 45, 0.35), transparent 35%),
+        radial-gradient(circle at top left, rgba(86, 31, 41, 0.45), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(29, 58, 44, 0.38), transparent 34%),
+        radial-gradient(circle at center, rgba(185, 155, 99, 0.08), transparent 45%),
         var(--bg);
       color: var(--paper);
     }
@@ -38,88 +39,45 @@
     body {
       min-height: 100svh;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       padding: 18px;
       overflow-x: hidden;
     }
 
     .app {
       width: min(94vw, 430px);
-      min-height: min(760px, 92svh);
+      min-height: 92svh;
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
-      position: relative;
+      align-items: center;
     }
 
-    .card-area {
+    .stage {
       width: 100%;
-      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       perspective: 1200px;
     }
 
-    .card {
+    .slide {
       width: 100%;
-      min-height: 535px;
-      border-radius: 18px;
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.42), transparent 28%),
-        repeating-linear-gradient(
-          90deg,
-          rgba(0,0,0,0.018) 0,
-          rgba(0,0,0,0.018) 1px,
-          transparent 1px,
-          transparent 8px
-        ),
-        var(--paper);
-      color: var(--ink);
-      box-shadow:
-        0 22px 60px rgba(0,0,0,0.42),
-        inset 0 0 0 1px rgba(80, 50, 35, 0.14);
-      padding: 34px 28px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      transform-origin: center;
-      transition:
-        opacity 420ms ease,
-        transform 520ms ease;
-    }
-
-    .card::before,
-    .card::after {
-      content: "";
-      position: absolute;
-      inset: 14px;
-      border: 1px solid rgba(84, 31, 37, 0.18);
-      border-radius: 12px;
-      pointer-events: none;
-    }
-
-    .card::after {
-      inset: 22px;
-      border-color: rgba(184, 155, 100, 0.32);
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .fade-out {
-      opacity: 0;
-      transform: translateY(-18px) scale(0.97);
-    }
-
-    .fade-in {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       animation: fadeIn 520ms ease both;
+    }
+
+    .slide.fade-out {
+      animation: fadeOut 260ms ease both;
     }
 
     @keyframes fadeIn {
       from {
         opacity: 0;
-        transform: translateY(22px) scale(0.97);
+        transform: translateY(18px) scale(0.97);
       }
       to {
         opacity: 1;
@@ -127,195 +85,160 @@
       }
     }
 
-    .wrapper-card {
-      min-height: 535px;
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-12px) scale(0.97);
+      }
+    }
+
+    .image-card {
+      width: 100%;
+      max-width: 430px;
+      height: auto;
+      display: block;
+      border-radius: 18px;
+      box-shadow:
+        0 24px 70px rgba(0, 0, 0, 0.48),
+        0 2px 0 rgba(255,255,255,0.08) inset;
+      background: var(--paper-soft);
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .open-card {
+      width: 100%;
+      max-width: 430px;
+      min-height: 520px;
+      border-radius: 20px;
       background:
-        linear-gradient(130deg, rgba(255,255,255,0.28), transparent 22%),
+        linear-gradient(130deg, rgba(255,255,255,0.32), transparent 25%),
         repeating-linear-gradient(
           -35deg,
-          rgba(84,31,37,0.08) 0,
-          rgba(84,31,37,0.08) 2px,
+          rgba(86, 31, 41, 0.08) 0,
+          rgba(86, 31, 41, 0.08) 2px,
           transparent 2px,
           transparent 18px
         ),
         #e7d8c2;
+      color: var(--ink);
+      box-shadow: 0 24px 70px rgba(0,0,0,0.48);
+      position: relative;
+      overflow: hidden;
+      padding: 38px 28px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 26px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .open-card::before,
+    .open-card::after {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border: 1px solid rgba(86, 31, 41, 0.18);
+      border-radius: 14px;
+      pointer-events: none;
+    }
+
+    .open-card::after {
+      inset: 25px;
+      border-color: rgba(185, 155, 99, 0.35);
     }
 
     .wrapper-band {
       position: absolute;
-      left: -20%;
-      right: -20%;
+      left: -22%;
+      right: -22%;
       top: 44%;
-      height: 82px;
+      height: 86px;
       background: linear-gradient(90deg, var(--green), var(--plum), var(--red));
       transform: rotate(-6deg);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.24);
-      opacity: 0.92;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+      opacity: 0.94;
     }
 
     .seal {
-      width: 82px;
-      height: 82px;
+      width: 86px;
+      height: 86px;
       border-radius: 50%;
       background:
-        radial-gradient(circle at 35% 30%, rgba(255,255,255,0.25), transparent 20%),
+        radial-gradient(circle at 35% 30%, rgba(255,255,255,0.28), transparent 20%),
         var(--red);
       color: #f2dfbf;
       display: grid;
       place-items: center;
-      margin: 0 auto;
+      margin: 0 auto 26px;
       z-index: 2;
-      font-size: 0.8rem;
-      letter-spacing: 0.14em;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       box-shadow:
-        0 8px 18px rgba(0,0,0,0.3),
+        0 9px 20px rgba(0,0,0,0.32),
         inset 0 0 0 2px rgba(255,255,255,0.12);
     }
 
-    h1,
-    h2,
-    h3,
-    p {
-      margin: 0;
+    .eyebrow {
       position: relative;
       z-index: 2;
-    }
-
-    .eyebrow {
+      margin: 0 0 20px;
       font-family: Arial, Helvetica, sans-serif;
       text-transform: uppercase;
       letter-spacing: 0.22em;
       font-size: 0.68rem;
       color: var(--muted);
-      margin-bottom: 20px;
     }
 
-    .names {
-      font-size: clamp(2.35rem, 12vw, 4.3rem);
-      line-height: 0.9;
+    .open-names {
+      position: relative;
+      z-index: 2;
+      margin: 0;
+      font-size: clamp(2.45rem, 12vw, 4.2rem);
+      line-height: 0.92;
       font-weight: 400;
       color: var(--ink);
     }
 
     .amp {
       display: block;
-      font-size: 2.25rem;
-      line-height: 1.2;
+      font-size: 2.2rem;
+      line-height: 1.25;
       color: var(--red);
       font-style: italic;
     }
 
-    .script-note {
-      font-size: 1.04rem;
-      line-height: 1.55;
-      color: var(--muted);
-      max-width: 310px;
-      margin: 24px auto 0;
-    }
-
-    .date {
-      margin-top: 30px;
-      font-family: Arial, Helvetica, sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      font-size: 0.82rem;
-      color: var(--red);
-      line-height: 1.7;
-    }
-
-    .strip {
-      display: inline-block;
-      background: rgba(255,255,255,0.45);
-      border: 1px solid rgba(84,31,37,0.18);
-      padding: 14px 22px;
-      border-radius: 999px;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
-      font-size: 1.4rem;
-      color: var(--ink);
-    }
-
-    .details-title {
-      font-size: 2.15rem;
-      color: var(--ink);
-      margin-bottom: 22px;
-      font-weight: 400;
-    }
-
-    .details-copy {
+    .tap-note {
+      position: relative;
+      z-index: 2;
+      margin: 28px auto 0;
       color: var(--muted);
       font-size: 1rem;
-      line-height: 1.6;
-      max-width: 330px;
-      margin: 0 auto 22px;
+      line-height: 1.5;
     }
-
-    .info-box {
-      background: rgba(84,31,37,0.08);
-      border: 1px solid rgba(84,31,37,0.18);
-      border-radius: 14px;
-      padding: 16px;
-      margin: 16px auto;
-      max-width: 330px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .info-label {
-      font-family: Arial, Helvetica, sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      font-size: 0.65rem;
-      color: var(--red);
-      margin-bottom: 7px;
-    }
-
-    .info-main {
-      font-size: 1.12rem;
-      line-height: 1.45;
-      color: var(--ink);
-    }
-
-    .palette {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin: 18px auto 8px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .swatch {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.6);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.16);
-    }
-
-    .swatch.green { background: #1f3a2d; }
-    .swatch.red { background: #541f25; }
-    .swatch.plum { background: #3b243d; }
-    .swatch.black { background: #161313; }
-    .swatch.brown { background: #4a3328; }
 
     .controls {
       width: 100%;
       display: flex;
-      gap: 12px;
       justify-content: center;
+      gap: 12px;
       margin-top: 18px;
     }
 
     button,
     .button-link {
       appearance: none;
-      border: 1px solid rgba(243, 234, 220, 0.28);
-      background: rgba(243, 234, 220, 0.1);
+      border: 1px solid rgba(244, 234, 219, 0.28);
+      background: rgba(244, 234, 219, 0.1);
       color: var(--paper);
       padding: 13px 18px;
       border-radius: 999px;
@@ -334,8 +257,8 @@
     button:hover,
     .button-link:hover {
       transform: translateY(-1px);
-      background: rgba(243, 234, 220, 0.17);
-      border-color: rgba(243, 234, 220, 0.45);
+      background: rgba(244, 234, 219, 0.17);
+      border-color: rgba(244, 234, 219, 0.45);
     }
 
     .primary {
@@ -351,19 +274,35 @@
     .progress {
       margin-top: 14px;
       font-family: Arial, Helvetica, sans-serif;
-      color: rgba(243, 234, 220, 0.62);
-      font-size: 0.75rem;
+      color: rgba(244, 234, 219, 0.64);
+      font-size: 0.72rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
+      text-align: center;
     }
 
     .footer-note {
-      margin-top: 12px;
-      color: rgba(243, 234, 220, 0.65);
+      margin-top: 10px;
+      color: rgba(244, 234, 219, 0.54);
       font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       text-align: center;
       line-height: 1.4;
+    }
+
+    .missing {
+      width: 100%;
+      max-width: 430px;
+      min-height: 260px;
+      border-radius: 18px;
+      background: var(--paper);
+      color: var(--ink);
+      box-shadow: 0 24px 70px rgba(0,0,0,0.48);
+      padding: 28px;
+      text-align: center;
+      display: grid;
+      place-items: center;
+      line-height: 1.5;
     }
 
     @media (max-height: 700px) {
@@ -372,21 +311,18 @@
         padding-top: 12px;
       }
 
-      .card {
-        min-height: 480px;
-        padding: 28px 22px;
+      .app {
+        min-height: auto;
       }
 
-      .wrapper-card {
-        min-height: 480px;
+      .open-card {
+        min-height: 460px;
       }
+    }
 
-      .details-title {
-        font-size: 1.85rem;
-      }
-
-      .details-copy {
-        font-size: 0.92rem;
+    @media (min-width: 700px) {
+      .app {
+        width: 430px;
       }
     }
   </style>
@@ -394,10 +330,8 @@
 
 <body>
   <main class="app">
-    <section class="card-area" aria-live="polite">
-      <article class="card wrapper-card" id="card">
-        <!-- Content is loaded by JavaScript -->
-      </article>
+    <section class="stage" aria-live="polite">
+      <div class="slide" id="slide"></div>
     </section>
 
     <div class="controls">
@@ -408,164 +342,73 @@
     <div class="progress" id="progressText">Invitation</div>
 
     <div class="footer-note">
-      Test invite page · Replace text, links, and details before sending.
+      Marco & Jess · October 31st, 2026
     </div>
   </main>
 
   <script>
     /*
-      HOW TO USE:
-      1. Replace the placeholder Google Form link below.
-      2. Replace reception location/details.
-      3. If you want ceremony-only guests to see ceremony info,
-         duplicate this file as ceremony.html and add a ceremony slide.
+      IMPORTANT:
+      Your image files should be uploaded here:
+
+      assets/invite/01-name-strip.png
+      assets/invite/02-main-invite.png
+      assets/invite/03-details.png
+      assets/invite/04-rsvp-card.png
+
+      Replace the RSVP_LINK below with your Google Form link.
     */
 
     const RSVP_LINK = "https://forms.google.com/YOUR-RSVP-FORM-LINK-HERE";
 
     const slides = [
       {
-        type: "wrapper",
+        type: "open",
         button: "Open",
+        label: "Invitation",
         html: `
-          <div class="wrapper-band"></div>
-          <div class="seal">10·31</div>
-          <p class="eyebrow">Wedding Invitation</p>
-          <h1 class="names">Marco <span class="amp">&</span> Jess</h1>
-          <p class="script-note">Tap to open</p>
+          <div class="open-card" role="button" tabindex="0" aria-label="Open wedding invitation">
+            <div class="wrapper-band"></div>
+            <div class="seal">10·31</div>
+            <p class="eyebrow">Wedding Invitation</p>
+            <h1 class="open-names">Marco <span class="amp">&</span> Jess</h1>
+            <p class="tap-note">Tap to open</p>
+          </div>
         `
       },
       {
-        type: "card",
+        type: "image",
         button: "Next",
-        html: `
-          <p class="eyebrow">Together with their families</p>
-          <div class="strip">Marco and Jess</div>
-          <p class="script-note">
-            invite you to celebrate a day of love, family, and joy.
-          </p>
-        `
+        label: "1 / 4",
+        src: "assets/invite/01-name-strip.png",
+        alt: "Marco and Jess name strip"
       },
       {
-        type: "card",
+        type: "image",
         button: "Next",
-        html: `
-          <p class="eyebrow">You are invited</p>
-          <h1 class="names">Marco Maria <span class="amp">&</span> Jess Arceo</h1>
-          <p class="script-note">invite you to celebrate their love</p>
-          <p class="date">
-            October 31st, 2026<br>
-            four o’clock in the afternoon
-          </p>
-        `
+        label: "2 / 4",
+        src: "assets/invite/02-main-invite.png",
+        alt: "Main wedding invitation for Marco Maria and Jess Arceo"
       },
       {
-        type: "card",
+        type: "image",
         button: "Next",
-        html: `
-          <h2 class="details-title">Details</h2>
-          <p class="details-copy">
-            Marco and Jess will be exchanging vows in a private ceremony
-            surrounded by close family and friends.
-          </p>
-          <p class="details-copy">
-            They would be honored to have you join them afterward
-            for their reception celebration.
-          </p>
-
-          <div class="info-box">
-            <div class="info-label">Reception begins</div>
-            <div class="info-main">3:00 PM</div>
-          </div>
-
-          <div class="info-box">
-            <div class="info-label">Food served</div>
-            <div class="info-main">6:00 PM</div>
-          </div>
-        `
+        label: "3 / 4",
+        src: "assets/invite/03-details.png",
+        alt: "Wedding details card"
       },
       {
-        type: "card",
-        button: "Next",
-        html: `
-          <h2 class="details-title">Attire</h2>
-          <p class="details-copy">
-            Dark romantic semi-formal attire is encouraged.
-          </p>
-          <p class="details-copy">
-            We invite guests to wear deep, moody tones such as forest green,
-            burgundy, wine red, plum, black, charcoal, or dark brown.
-          </p>
-
-          <div class="palette" aria-label="Suggested color palette">
-            <span class="swatch green"></span>
-            <span class="swatch red"></span>
-            <span class="swatch plum"></span>
-            <span class="swatch black"></span>
-            <span class="swatch brown"></span>
-          </div>
-
-          <div class="info-box">
-            <div class="info-label">Halloween note</div>
-            <div class="info-main">
-              Guests are welcome to change into costumes after 8:00 PM.
-            </div>
-          </div>
-        `
-      },
-      {
-        type: "card",
-        button: "Next",
-        html: `
-          <h2 class="details-title">Reception</h2>
-          <p class="details-copy">
-            Join us for dinner, music, and celebration.
-          </p>
-
-          <div class="info-box">
-            <div class="info-label">Location</div>
-            <div class="info-main">
-              Reception location goes here<br>
-              Perris, California
-            </div>
-          </div>
-
-          <div class="info-box">
-            <div class="info-label">Time</div>
-            <div class="info-main">
-              3:00 PM<br>
-              Food served at 6:00 PM
-            </div>
-          </div>
-        `
-      },
-      {
-        type: "card",
+        type: "image",
         button: "RSVP",
-        html: `
-          <h2 class="details-title">Kindly Reply</h2>
-          <p class="details-copy">
-            Please RSVP by the third of July.
-          </p>
-
-          <div class="info-box">
-            <div class="info-label">Response</div>
-            <div class="info-main">
-              Gratefully accepts<br>
-              Respectfully declines
-            </div>
-          </div>
-
-          <p class="script-note">
-            Tap RSVP below to submit your response.
-          </p>
-        `
+        label: "4 / 4",
+        src: "assets/invite/04-rsvp-card.png",
+        alt: "RSVP card"
       }
     ];
 
     let currentSlide = 0;
 
-    const card = document.getElementById("card");
+    const slideEl = document.getElementById("slide");
     const nextBtn = document.getElementById("nextBtn");
     const backBtn = document.getElementById("backBtn");
     const progressText = document.getElementById("progressText");
@@ -573,20 +416,44 @@
     function renderSlide() {
       const slide = slides[currentSlide];
 
-      card.className = "card fade-in";
-      if (slide.type === "wrapper") {
-        card.classList.add("wrapper-card");
+      slideEl.className = "slide";
+
+      if (slide.type === "open") {
+        slideEl.innerHTML = slide.html;
       }
 
-      card.innerHTML = slide.html;
+      if (slide.type === "image") {
+        slideEl.innerHTML = `
+          <img
+            class="image-card"
+            src="${slide.src}"
+            alt="${slide.alt}"
+            onerror="this.outerHTML='<div class=&quot;missing&quot;><div><strong>Image missing</strong><br>${slide.src}<br><br>Check the file name and folder path.</div></div>'"
+          />
+        `;
+      }
 
       backBtn.style.visibility = currentSlide === 0 ? "hidden" : "visible";
       nextBtn.textContent = slide.button;
+      progressText.textContent = slide.label;
 
-      progressText.textContent =
-        currentSlide === 0
-          ? "Invitation"
-          : `${currentSlide} / ${slides.length - 1}`;
+      const clickable = slideEl.querySelector(".open-card, .image-card");
+      if (clickable) {
+        clickable.addEventListener("click", () => {
+          if (currentSlide < slides.length - 1) {
+            goNext();
+          }
+        });
+
+        clickable.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            if (currentSlide < slides.length - 1) {
+              goNext();
+            }
+          }
+        });
+      }
     }
 
     function goNext() {
@@ -595,34 +462,27 @@
         return;
       }
 
-      card.classList.add("fade-out");
+      slideEl.classList.add("fade-out");
 
       setTimeout(() => {
         currentSlide += 1;
         renderSlide();
-      }, 260);
+      }, 250);
     }
 
     function goBack() {
       if (currentSlide === 0) return;
 
-      card.classList.add("fade-out");
+      slideEl.classList.add("fade-out");
 
       setTimeout(() => {
         currentSlide -= 1;
         renderSlide();
-      }, 260);
+      }, 250);
     }
 
     nextBtn.addEventListener("click", goNext);
     backBtn.addEventListener("click", goBack);
-
-    // Lets guests tap the card itself to continue.
-    card.addEventListener("click", () => {
-      if (currentSlide !== slides.length - 1) {
-        goNext();
-      }
-    });
 
     renderSlide();
   </script>
