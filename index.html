@@ -10,9 +10,8 @@
     :root {
       --bg: #100c0d;
       --paper: #f4eadb;
-      --paper-soft: #eadcc8;
       --ink: #241817;
-      --muted: #7b685e;
+      --muted: rgba(244, 234, 219, 0.66);
       --red: #561f29;
       --green: #1d3a2c;
       --plum: #3b243d;
@@ -27,13 +26,14 @@
     body {
       margin: 0;
       min-height: 100%;
-      font-family: Georgia, "Times New Roman", serif;
       background:
         radial-gradient(circle at top left, rgba(86, 31, 41, 0.45), transparent 34%),
         radial-gradient(circle at bottom right, rgba(29, 58, 44, 0.38), transparent 34%),
         radial-gradient(circle at center, rgba(185, 155, 99, 0.08), transparent 45%),
         var(--bg);
       color: var(--paper);
+      font-family: Georgia, "Times New Roman", serif;
+      overflow-x: hidden;
     }
 
     body {
@@ -42,7 +42,6 @@
       justify-content: center;
       align-items: center;
       padding: 18px;
-      overflow-x: hidden;
     }
 
     .app {
@@ -54,246 +53,258 @@
       align-items: center;
     }
 
-    .stage {
+    .stack-wrap {
       width: 100%;
+      min-height: 590px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      touch-action: pan-y;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .stack {
+      width: 100%;
+      height: 590px;
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
       perspective: 1200px;
     }
 
-    .slide {
+    .card {
+      position: absolute;
       width: 100%;
+      max-width: 430px;
       display: flex;
       justify-content: center;
       align-items: center;
-      animation: fadeIn 520ms ease both;
+      transition:
+        transform 360ms ease,
+        opacity 360ms ease,
+        filter 360ms ease;
+      will-change: transform, opacity;
+      cursor: grab;
     }
 
-    .slide.fade-out {
-      animation: fadeOut 260ms ease both;
+    .card:active {
+      cursor: grabbing;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(18px) scale(0.97);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    @keyframes fadeOut {
-      from {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-      to {
-        opacity: 0;
-        transform: translateY(-12px) scale(0.97);
-      }
-    }
-
-    .image-card {
+    .card img {
       width: 100%;
-      max-width: 430px;
       height: auto;
       display: block;
       border-radius: 18px;
+      background: #eadcc8;
       box-shadow:
         0 24px 70px rgba(0, 0, 0, 0.48),
         0 2px 0 rgba(255,255,255,0.08) inset;
-      background: var(--paper-soft);
-      cursor: pointer;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .open-card {
-      width: 100%;
-      max-width: 430px;
-      min-height: 520px;
-      border-radius: 20px;
-      background:
-        linear-gradient(130deg, rgba(255,255,255,0.32), transparent 25%),
-        repeating-linear-gradient(
-          -35deg,
-          rgba(86, 31, 41, 0.08) 0,
-          rgba(86, 31, 41, 0.08) 2px,
-          transparent 2px,
-          transparent 18px
-        ),
-        #e7d8c2;
-      color: var(--ink);
-      box-shadow: 0 24px 70px rgba(0,0,0,0.48);
-      position: relative;
-      overflow: hidden;
-      padding: 38px 28px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      text-align: center;
-      cursor: pointer;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .open-card::before,
-    .open-card::after {
-      content: "";
-      position: absolute;
-      inset: 16px;
-      border: 1px solid rgba(86, 31, 41, 0.18);
-      border-radius: 14px;
       pointer-events: none;
     }
 
-    .open-card::after {
-      inset: 25px;
-      border-color: rgba(185, 155, 99, 0.35);
+    .card.active {
+      z-index: 10;
     }
 
-    .wrapper-band {
-      position: absolute;
-      left: -22%;
-      right: -22%;
-      top: 44%;
-      height: 86px;
-      background: linear-gradient(90deg, var(--green), var(--plum), var(--red));
-      transform: rotate(-6deg);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.25);
-      opacity: 0.94;
+    .card.next-1 {
+      z-index: 9;
+      transform: translateY(16px) scale(0.965) rotate(-1.1deg);
+      opacity: 0.92;
+      filter: brightness(0.95);
     }
 
-    .seal {
-      width: 86px;
-      height: 86px;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at 35% 30%, rgba(255,255,255,0.28), transparent 20%),
-        var(--red);
-      color: #f2dfbf;
-      display: grid;
-      place-items: center;
-      margin: 0 auto 26px;
-      z-index: 2;
+    .card.next-2 {
+      z-index: 8;
+      transform: translateY(30px) scale(0.93) rotate(1.1deg);
+      opacity: 0.72;
+      filter: brightness(0.88);
+    }
+
+    .card.next-3 {
+      z-index: 7;
+      transform: translateY(42px) scale(0.9) rotate(-0.6deg);
+      opacity: 0.5;
+      filter: brightness(0.8);
+    }
+
+    .card.prev {
+      z-index: 1;
+      transform: translateX(-120vw) rotate(-18deg);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .card.hidden-card {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.88);
+    }
+
+    .card.swiping {
+      transition: none;
+    }
+
+    .hint {
+      margin-top: 16px;
+      text-align: center;
       font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.15em;
       text-transform: uppercase;
-      box-shadow:
-        0 9px 20px rgba(0,0,0,0.32),
-        inset 0 0 0 2px rgba(255,255,255,0.12);
-    }
-
-    .eyebrow {
-      position: relative;
-      z-index: 2;
-      margin: 0 0 20px;
-      font-family: Arial, Helvetica, sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.22em;
-      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      font-size: 0.72rem;
       color: var(--muted);
+      line-height: 1.6;
     }
 
-    .open-names {
-      position: relative;
-      z-index: 2;
-      margin: 0;
-      font-size: clamp(2.45rem, 12vw, 4.2rem);
-      line-height: 0.92;
-      font-weight: 400;
-      color: var(--ink);
-    }
-
-    .amp {
-      display: block;
-      font-size: 2.2rem;
-      line-height: 1.25;
-      color: var(--red);
-      font-style: italic;
-    }
-
-    .tap-note {
-      position: relative;
-      z-index: 2;
-      margin: 28px auto 0;
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1.5;
-    }
-
-    .controls {
-      width: 100%;
+    .dots {
       display: flex;
       justify-content: center;
-      gap: 12px;
-      margin-top: 18px;
+      gap: 7px;
+      margin-top: 10px;
     }
 
-    button,
-    .button-link {
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(244, 234, 219, 0.28);
+      transition: all 220ms ease;
+    }
+
+    .dot.active-dot {
+      width: 20px;
+      background: rgba(244, 234, 219, 0.82);
+    }
+
+    .rsvp-button {
+      display: none;
+      margin-top: 18px;
       appearance: none;
-      border: 1px solid rgba(244, 234, 219, 0.28);
-      background: rgba(244, 234, 219, 0.1);
-      color: var(--paper);
-      padding: 13px 18px;
+      border: 1px solid var(--paper);
+      background: var(--paper);
+      color: var(--ink);
+      padding: 14px 22px;
       border-radius: 999px;
       font-family: Arial, Helvetica, sans-serif;
       font-size: 0.78rem;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       cursor: pointer;
       text-decoration: none;
-      transition:
-        transform 180ms ease,
-        background 180ms ease,
-        border-color 180ms ease;
     }
 
-    button:hover,
-    .button-link:hover {
-      transform: translateY(-1px);
-      background: rgba(244, 234, 219, 0.17);
-      border-color: rgba(244, 234, 219, 0.45);
+    .rsvp-button.show {
+      display: inline-flex;
     }
 
-    .primary {
+    .form-screen {
+      display: none;
+      width: 100%;
+      max-width: 430px;
       background: var(--paper);
       color: var(--ink);
-      border-color: var(--paper);
+      border-radius: 20px;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.48);
+      padding: 28px;
+      animation: fadeIn 360ms ease both;
     }
 
-    .primary:hover {
-      background: #fff7ea;
+    .form-screen.show {
+      display: block;
     }
 
-    .progress {
-      margin-top: 14px;
+    .form-screen h1 {
+      margin: 0 0 8px;
+      font-size: 2rem;
+      font-weight: 400;
+      text-align: center;
+    }
+
+    .form-screen p {
+      margin: 0 0 22px;
+      color: #725f56;
+      line-height: 1.5;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
       font-family: Arial, Helvetica, sans-serif;
-      color: rgba(244, 234, 219, 0.64);
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
       text-transform: uppercase;
-      text-align: center;
+      letter-spacing: 0.12em;
+      font-size: 0.68rem;
+      color: #561f29;
     }
 
-    .footer-note {
-      margin-top: 10px;
-      color: rgba(244, 234, 219, 0.54);
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(36, 24, 23, 0.18);
+      background: rgba(255,255,255,0.48);
+      border-radius: 12px;
+      padding: 13px 12px;
+      font: inherit;
+      color: var(--ink);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 92px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .form-actions button {
+      flex: 1;
+      appearance: none;
+      border-radius: 999px;
+      border: 1px solid rgba(36, 24, 23, 0.2);
+      padding: 13px 16px;
       font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      font-size: 0.72rem;
+      cursor: pointer;
+    }
+
+    .submit-btn {
+      background: var(--red);
+      color: var(--paper);
+      border-color: var(--red);
+    }
+
+    .back-btn {
+      background: transparent;
+      color: var(--ink);
+    }
+
+    .status {
+      margin-top: 14px;
       text-align: center;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.78rem;
+      color: #561f29;
       line-height: 1.4;
     }
 
     .missing {
       width: 100%;
-      max-width: 430px;
-      min-height: 260px;
+      min-height: 220px;
       border-radius: 18px;
       background: var(--paper);
       color: var(--ink);
@@ -305,7 +316,18 @@
       line-height: 1.5;
     }
 
-    @media (max-height: 700px) {
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (max-height: 720px) {
       body {
         align-items: flex-start;
         padding-top: 12px;
@@ -315,14 +337,12 @@
         min-height: auto;
       }
 
-      .open-card {
-        min-height: 460px;
+      .stack-wrap {
+        min-height: 520px;
       }
-    }
 
-    @media (min-width: 700px) {
-      .app {
-        width: 430px;
+      .stack {
+        height: 520px;
       }
     }
   </style>
@@ -330,161 +350,306 @@
 
 <body>
   <main class="app">
-    <section class="stage" aria-live="polite">
-      <div class="slide" id="slide"></div>
+    <section class="stack-wrap" id="stackWrap" aria-label="Wedding invitation card stack">
+      <div class="stack" id="stack"></div>
     </section>
 
-    <div class="controls">
-      <button id="backBtn" type="button">Back</button>
-      <button id="nextBtn" class="primary" type="button">Open</button>
+    <button class="rsvp-button" id="rsvpButton" type="button">RSVP</button>
+
+    <div class="hint" id="hintText">
+      swipe left to open<br>
+      swipe right to go back
     </div>
 
-    <div class="progress" id="progressText">Invitation</div>
+    <div class="dots" id="dots"></div>
 
-    <div class="footer-note">
-      Marco & Jess · October 31st, 2026
-    </div>
+    <section class="form-screen" id="formScreen" aria-label="RSVP form">
+      <h1>Kindly Reply</h1>
+      <p>Please submit your RSVP by the third of July.</p>
+
+      <!--
+        Replace the action URL with your Formspree endpoint later.
+        Until then, the form layout will show but submissions will not save.
+      -->
+      <form id="rsvpForm" action="https://formspree.io/f/YOUR_ID_HERE" method="POST">
+        <div class="field">
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required />
+        </div>
+
+        <div class="field">
+          <label for="attending">Will you be attending?</label>
+          <select id="attending" name="attending" required>
+            <option value="">Choose one</option>
+            <option value="Gratefully accepts">Gratefully accepts</option>
+            <option value="Respectfully declines">Respectfully declines</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="guests">Number of guests</label>
+          <input id="guests" name="number_of_guests" type="number" min="0" max="10" placeholder="Example: 2" />
+        </div>
+
+        <div class="field">
+          <label for="notes">Food allergies / notes</label>
+          <textarea id="notes" name="notes" placeholder="Optional"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button class="back-btn" id="formBackBtn" type="button">Back</button>
+          <button class="submit-btn" type="submit">Submit</button>
+        </div>
+
+        <div class="status" id="formStatus"></div>
+      </form>
+    </section>
   </main>
 
   <script>
     /*
-      IMPORTANT:
-      Your image files should be uploaded here:
+      FILES NEEDED:
 
       assets/invite/01-name-strip.png
       assets/invite/02-main-invite.png
       assets/invite/03-details.png
       assets/invite/04-rsvp-card.png
 
-      Replace the RSVP_LINK below with your Google Form link.
+      Later, replace this form action:
+      https://formspree.io/f/YOUR_ID_HERE
     */
 
-    const RSVP_LINK = "https://forms.google.com/YOUR-RSVP-FORM-LINK-HERE";
-
-    const slides = [
+    const cards = [
       {
-        type: "open",
-        button: "Open",
-        label: "Invitation",
-        html: `
-          <div class="open-card" role="button" tabindex="0" aria-label="Open wedding invitation">
-            <div class="wrapper-band"></div>
-            <div class="seal">10·31</div>
-            <p class="eyebrow">Wedding Invitation</p>
-            <h1 class="open-names">Marco <span class="amp">&</span> Jess</h1>
-            <p class="tap-note">Tap to open</p>
-          </div>
-        `
-      },
-      {
-        type: "image",
-        button: "Next",
-        label: "1 / 4",
         src: "assets/invite/01-name-strip.png",
         alt: "Marco and Jess name strip"
       },
       {
-        type: "image",
-        button: "Next",
-        label: "2 / 4",
         src: "assets/invite/02-main-invite.png",
         alt: "Main wedding invitation for Marco Maria and Jess Arceo"
       },
       {
-        type: "image",
-        button: "Next",
-        label: "3 / 4",
         src: "assets/invite/03-details.png",
         alt: "Wedding details card"
       },
       {
-        type: "image",
-        button: "RSVP",
-        label: "4 / 4",
         src: "assets/invite/04-rsvp-card.png",
         alt: "RSVP card"
       }
     ];
 
-    let currentSlide = 0;
+    let currentIndex = 0;
+    let startX = 0;
+    let currentX = 0;
+    let isDragging = false;
 
-    const slideEl = document.getElementById("slide");
-    const nextBtn = document.getElementById("nextBtn");
-    const backBtn = document.getElementById("backBtn");
-    const progressText = document.getElementById("progressText");
+    const stack = document.getElementById("stack");
+    const stackWrap = document.getElementById("stackWrap");
+    const dots = document.getElementById("dots");
+    const hintText = document.getElementById("hintText");
+    const rsvpButton = document.getElementById("rsvpButton");
+    const formScreen = document.getElementById("formScreen");
+    const formBackBtn = document.getElementById("formBackBtn");
+    const rsvpForm = document.getElementById("rsvpForm");
+    const formStatus = document.getElementById("formStatus");
 
-    function renderSlide() {
-      const slide = slides[currentSlide];
+    function buildCards() {
+      stack.innerHTML = "";
 
-      slideEl.className = "slide";
+      cards.forEach((card, index) => {
+        const cardEl = document.createElement("div");
+        cardEl.className = "card";
+        cardEl.dataset.index = index;
 
-      if (slide.type === "open") {
-        slideEl.innerHTML = slide.html;
-      }
-
-      if (slide.type === "image") {
-        slideEl.innerHTML = `
+        cardEl.innerHTML = `
           <img
-            class="image-card"
-            src="${slide.src}"
-            alt="${slide.alt}"
-            onerror="this.outerHTML='<div class=&quot;missing&quot;><div><strong>Image missing</strong><br>${slide.src}<br><br>Check the file name and folder path.</div></div>'"
+            src="${card.src}"
+            alt="${card.alt}"
+            draggable="false"
+            onerror="this.outerHTML='<div class=&quot;missing&quot;><div><strong>Image missing</strong><br>${card.src}<br><br>Check the file name and folder path.</div></div>'"
           />
         `;
-      }
 
-      backBtn.style.visibility = currentSlide === 0 ? "hidden" : "visible";
-      nextBtn.textContent = slide.button;
-      progressText.textContent = slide.label;
+        stack.appendChild(cardEl);
+      });
+    }
 
-      const clickable = slideEl.querySelector(".open-card, .image-card");
-      if (clickable) {
-        clickable.addEventListener("click", () => {
-          if (currentSlide < slides.length - 1) {
-            goNext();
-          }
-        });
+    function buildDots() {
+      dots.innerHTML = "";
 
-        clickable.addEventListener("keydown", (event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            if (currentSlide < slides.length - 1) {
-              goNext();
-            }
-          }
-        });
-      }
+      cards.forEach((_, index) => {
+        const dot = document.createElement("div");
+        dot.className = "dot";
+        if (index === currentIndex) dot.classList.add("active-dot");
+        dots.appendChild(dot);
+      });
+    }
+
+    function updateStack() {
+      const cardEls = document.querySelectorAll(".card");
+
+      cardEls.forEach((cardEl) => {
+        const index = Number(cardEl.dataset.index);
+        const offset = index - currentIndex;
+
+        cardEl.className = "card";
+
+        if (offset === 0) {
+          cardEl.classList.add("active");
+          cardEl.style.transform = "translateX(0) translateY(0) scale(1) rotate(0deg)";
+          cardEl.style.opacity = "1";
+          cardEl.style.pointerEvents = "auto";
+        } else if (offset === 1) {
+          cardEl.classList.add("next-1");
+          cardEl.style.pointerEvents = "none";
+        } else if (offset === 2) {
+          cardEl.classList.add("next-2");
+          cardEl.style.pointerEvents = "none";
+        } else if (offset === 3) {
+          cardEl.classList.add("next-3");
+          cardEl.style.pointerEvents = "none";
+        } else if (offset < 0) {
+          cardEl.classList.add("prev");
+        } else {
+          cardEl.classList.add("hidden-card");
+        }
+      });
+
+      buildDots();
+
+      const isLastCard = currentIndex === cards.length - 1;
+      rsvpButton.classList.toggle("show", isLastCard);
+
+      hintText.innerHTML = isLastCard
+        ? "swipe right to go back<br>or tap RSVP"
+        : currentIndex === 0
+          ? "swipe left to open"
+          : "swipe left to continue<br>swipe right to go back";
     }
 
     function goNext() {
-      if (currentSlide === slides.length - 1) {
-        window.open(RSVP_LINK, "_blank");
-        return;
+      if (currentIndex < cards.length - 1) {
+        currentIndex += 1;
+        updateStack();
       }
-
-      slideEl.classList.add("fade-out");
-
-      setTimeout(() => {
-        currentSlide += 1;
-        renderSlide();
-      }, 250);
     }
 
     function goBack() {
-      if (currentSlide === 0) return;
-
-      slideEl.classList.add("fade-out");
-
-      setTimeout(() => {
-        currentSlide -= 1;
-        renderSlide();
-      }, 250);
+      if (currentIndex > 0) {
+        currentIndex -= 1;
+        updateStack();
+      }
     }
 
-    nextBtn.addEventListener("click", goNext);
-    backBtn.addEventListener("click", goBack);
+    function getActiveCard() {
+      return document.querySelector(".card.active");
+    }
 
-    renderSlide();
+    function onPointerDown(event) {
+      const activeCard = getActiveCard();
+      if (!activeCard || formScreen.classList.contains("show")) return;
+
+      isDragging = true;
+      startX = event.clientX || event.touches?.[0]?.clientX || 0;
+      currentX = startX;
+
+      activeCard.classList.add("swiping");
+    }
+
+    function onPointerMove(event) {
+      if (!isDragging) return;
+
+      const activeCard = getActiveCard();
+      if (!activeCard) return;
+
+      currentX = event.clientX || event.touches?.[0]?.clientX || 0;
+      const diffX = currentX - startX;
+      const rotate = diffX / 22;
+
+      activeCard.style.transform = `translateX(${diffX}px) rotate(${rotate}deg)`;
+    }
+
+    function onPointerUp() {
+      if (!isDragging) return;
+
+      const activeCard = getActiveCard();
+      const diffX = currentX - startX;
+      const threshold = 85;
+
+      isDragging = false;
+
+      if (activeCard) {
+        activeCard.classList.remove("swiping");
+      }
+
+      if (diffX < -threshold) {
+        goNext();
+      } else if (diffX > threshold) {
+        goBack();
+      } else {
+        updateStack();
+      }
+    }
+
+    function openForm() {
+      stackWrap.style.display = "none";
+      rsvpButton.classList.remove("show");
+      hintText.style.display = "none";
+      dots.style.display = "none";
+      formScreen.classList.add("show");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function closeForm() {
+      formScreen.classList.remove("show");
+      stackWrap.style.display = "flex";
+      hintText.style.display = "block";
+      dots.style.display = "flex";
+      updateStack();
+    }
+
+    stackWrap.addEventListener("pointerdown", onPointerDown);
+    stackWrap.addEventListener("pointermove", onPointerMove);
+    stackWrap.addEventListener("pointerup", onPointerUp);
+    stackWrap.addEventListener("pointercancel", onPointerUp);
+
+    rsvpButton.addEventListener("click", openForm);
+    formBackBtn.addEventListener("click", closeForm);
+
+    rsvpForm.addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const formAction = rsvpForm.getAttribute("action");
+
+      if (formAction.includes("YOUR_ID_HERE")) {
+        formStatus.textContent = "RSVP form is not connected yet. Add your Formspree endpoint first.";
+        return;
+      }
+
+      formStatus.textContent = "Submitting...";
+
+      try {
+        const response = await fetch(formAction, {
+          method: "POST",
+          body: new FormData(rsvpForm),
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+
+        if (response.ok) {
+          formStatus.textContent = "Thank you. Your RSVP has been received.";
+          rsvpForm.reset();
+        } else {
+          formStatus.textContent = "Something went wrong. Please try again.";
+        }
+      } catch (error) {
+        formStatus.textContent = "Something went wrong. Please check your connection and try again.";
+      }
+    });
+
+    buildCards();
+    updateStack();
   </script>
 </body>
 </html>
