@@ -84,6 +84,7 @@
 
     .stage {
       width: 100%;
+      min-height: 560px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -98,6 +99,22 @@
       -webkit-tap-highlight-color: transparent;
       user-select: none;
       animation: cardEnter 420ms ease both;
+      margin: 0 auto;
+    }
+
+    .card-shell.small-card {
+      width: min(78vw, 340px);
+      max-width: 340px;
+    }
+
+    .card-shell.medium-card {
+      width: min(86vw, 380px);
+      max-width: 380px;
+    }
+
+    .card-shell.large-card {
+      width: min(94vw, 430px);
+      max-width: 430px;
     }
 
     @keyframes cardEnter {
@@ -392,6 +409,10 @@
       .app {
         min-height: auto;
       }
+
+      .stage {
+        min-height: 500px;
+      }
     }
   </style>
 </head>
@@ -458,22 +479,26 @@
       {
         src: "assets/invite/01-name-strip.png",
         alt: "Marco and Jess name strip",
-        split: true
+        split: true,
+        sizeClass: "small-card"
       },
       {
         src: "assets/invite/02-main-invite.png",
         alt: "Main wedding invitation for Marco Maria and Jess Arceo",
-        split: false
+        split: false,
+        sizeClass: "large-card"
       },
       {
         src: "assets/invite/03-details.png",
         alt: "Wedding details card",
-        split: false
+        split: false,
+        sizeClass: "small-card"
       },
       {
         src: "assets/invite/04-rsvp-card.png",
         alt: "RSVP card",
-        split: false
+        split: false,
+        sizeClass: "medium-card"
       }
     ];
 
@@ -520,7 +545,7 @@
 
       if (card.split) {
         stage.innerHTML = `
-          <div class="card-shell" id="activeCard" role="button" tabindex="0" aria-label="Open card">
+          <div class="card-shell ${card.sizeClass}" id="activeCard" role="button" tabindex="0" aria-label="Open card">
             <div class="split-card">
               <img class="split-base" src="${card.src}" alt="" draggable="false">
               <div class="flap flap-left">
@@ -535,7 +560,7 @@
         `;
       } else {
         stage.innerHTML = `
-          <div class="card-shell" id="activeCard" role="button" tabindex="0" aria-label="Open card">
+          <div class="card-shell ${card.sizeClass}" id="activeCard" role="button" tabindex="0" aria-label="Open card">
             <img
               class="whole-card"
               src="${card.src}"
