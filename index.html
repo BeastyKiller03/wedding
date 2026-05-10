@@ -11,7 +11,7 @@
       --bg: #100c0d;
       --paper: #f4eadb;
       --ink: #241817;
-      --muted: rgba(244, 234, 219, 0.66);
+      --muted: rgba(244, 234, 219, 0.68);
       --red: #561f29;
       --green: #1d3a2c;
       --plum: #3b243d;
@@ -53,49 +53,65 @@
       align-items: center;
     }
 
-    .stack-wrap {
+    .top-bar {
       width: 100%;
-      min-height: 590px;
+      min-height: 42px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      position: relative;
-      touch-action: pan-y;
-      user-select: none;
-      -webkit-user-select: none;
-      -webkit-tap-highlight-color: transparent;
+      justify-content: flex-start;
+      margin-bottom: 12px;
     }
 
-    .stack {
+    .back-arrow {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(244, 234, 219, 0.32);
+      background: rgba(244, 234, 219, 0.08);
+      color: var(--paper);
+      font-size: 1.35rem;
+      line-height: 1;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+    }
+
+    .back-arrow.show {
+      display: inline-flex;
+    }
+
+    .stage {
       width: 100%;
-      height: 590px;
-      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
       perspective: 1200px;
     }
 
-    .card {
-      position: absolute;
+    .card-shell {
       width: 100%;
       max-width: 430px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition:
-        transform 360ms ease,
-        opacity 360ms ease,
-        filter 360ms ease;
-      will-change: transform, opacity;
-      cursor: grab;
+      position: relative;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      animation: cardEnter 420ms ease both;
     }
 
-    .card:active {
-      cursor: grabbing;
+    @keyframes cardEnter {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
 
-    .card img {
+    .whole-card {
       width: 100%;
       height: auto;
       display: block;
@@ -107,46 +123,97 @@
       pointer-events: none;
     }
 
-    .card.active {
-      z-index: 10;
+    .split-card {
+      width: 100%;
+      position: relative;
+      border-radius: 18px;
+      overflow: visible;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.48);
+      transform-style: preserve-3d;
     }
 
-    .card.next-1 {
-      z-index: 9;
-      transform: translateY(16px) scale(0.965) rotate(-1.1deg);
-      opacity: 0.92;
-      filter: brightness(0.95);
-    }
-
-    .card.next-2 {
-      z-index: 8;
-      transform: translateY(30px) scale(0.93) rotate(1.1deg);
-      opacity: 0.72;
-      filter: brightness(0.88);
-    }
-
-    .card.next-3 {
-      z-index: 7;
-      transform: translateY(42px) scale(0.9) rotate(-0.6deg);
-      opacity: 0.5;
-      filter: brightness(0.8);
-    }
-
-    .card.prev {
-      z-index: 1;
-      transform: translateX(-120vw) rotate(-18deg);
+    .split-base {
+      width: 100%;
+      height: auto;
+      display: block;
       opacity: 0;
       pointer-events: none;
     }
 
-    .card.hidden-card {
-      opacity: 0;
-      pointer-events: none;
-      transform: scale(0.88);
+    .flap {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+      background: #eadcc8;
+      backface-visibility: hidden;
+      transition:
+        transform 900ms cubic-bezier(.2,.8,.2,1),
+        opacity 700ms ease,
+        filter 700ms ease;
+      will-change: transform, opacity;
     }
 
-    .card.swiping {
-      transition: none;
+    .flap img {
+      position: absolute;
+      top: 0;
+      width: 200%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .flap-left {
+      left: 0;
+      border-radius: 18px 0 0 18px;
+      transform-origin: left center;
+    }
+
+    .flap-left img {
+      left: 0;
+    }
+
+    .flap-right {
+      right: 0;
+      border-radius: 0 18px 18px 0;
+      transform-origin: right center;
+    }
+
+    .flap-right img {
+      right: 0;
+    }
+
+    .card-shell.opening .flap-left {
+      transform: translateX(-42%) rotateY(-72deg);
+      opacity: 0;
+      filter: brightness(0.76);
+    }
+
+    .card-shell.opening .flap-right {
+      transform: translateX(42%) rotateY(72deg);
+      opacity: 0;
+      filter: brightness(0.76);
+    }
+
+    .card-shell.opening {
+      pointer-events: none;
+    }
+
+    .card-shell.exit {
+      animation: cardExit 300ms ease both;
+    }
+
+    @keyframes cardExit {
+      from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-14px) scale(0.96);
+      }
     }
 
     .hint {
@@ -210,7 +277,7 @@
       border-radius: 20px;
       box-shadow: 0 24px 70px rgba(0,0,0,0.48);
       padding: 28px;
-      animation: fadeIn 360ms ease both;
+      animation: cardEnter 360ms ease both;
     }
 
     .form-screen.show {
@@ -316,17 +383,6 @@
       line-height: 1.5;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(14px) scale(0.98);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
     @media (max-height: 720px) {
       body {
         align-items: flex-start;
@@ -336,29 +392,24 @@
       .app {
         min-height: auto;
       }
-
-      .stack-wrap {
-        min-height: 520px;
-      }
-
-      .stack {
-        height: 520px;
-      }
     }
   </style>
 </head>
 
 <body>
   <main class="app">
-    <section class="stack-wrap" id="stackWrap" aria-label="Wedding invitation card stack">
-      <div class="stack" id="stack"></div>
+    <div class="top-bar">
+      <button class="back-arrow" id="backArrow" type="button" aria-label="Go back">←</button>
+    </div>
+
+    <section class="stage" id="stage" aria-label="Wedding invitation">
+      <!-- Card loads here -->
     </section>
 
     <button class="rsvp-button" id="rsvpButton" type="button">RSVP</button>
 
     <div class="hint" id="hintText">
-      swipe left to open<br>
-      swipe right to go back
+      tap to open
     </div>
 
     <div class="dots" id="dots"></div>
@@ -367,10 +418,6 @@
       <h1>Kindly Reply</h1>
       <p>Please submit your RSVP by the third of July.</p>
 
-      <!--
-        Replace the action URL with your Formspree endpoint later.
-        Until then, the form layout will show but submissions will not save.
-      -->
       <form id="rsvpForm" action="https://formspree.io/f/YOUR_ID_HERE" method="POST">
         <div class="field">
           <label for="name">Your name</label>
@@ -407,72 +454,41 @@
   </main>
 
   <script>
-    /*
-      FILES NEEDED:
-
-      assets/invite/01-name-strip.png
-      assets/invite/02-main-invite.png
-      assets/invite/03-details.png
-      assets/invite/04-rsvp-card.png
-
-      Later, replace this form action:
-      https://formspree.io/f/YOUR_ID_HERE
-    */
-
     const cards = [
       {
         src: "assets/invite/01-name-strip.png",
-        alt: "Marco and Jess name strip"
+        alt: "Marco and Jess name strip",
+        split: true
       },
       {
         src: "assets/invite/02-main-invite.png",
-        alt: "Main wedding invitation for Marco Maria and Jess Arceo"
+        alt: "Main wedding invitation for Marco Maria and Jess Arceo",
+        split: false
       },
       {
         src: "assets/invite/03-details.png",
-        alt: "Wedding details card"
+        alt: "Wedding details card",
+        split: false
       },
       {
         src: "assets/invite/04-rsvp-card.png",
-        alt: "RSVP card"
+        alt: "RSVP card",
+        split: false
       }
     ];
 
     let currentIndex = 0;
-    let startX = 0;
-    let currentX = 0;
-    let isDragging = false;
+    let isAnimating = false;
 
-    const stack = document.getElementById("stack");
-    const stackWrap = document.getElementById("stackWrap");
-    const dots = document.getElementById("dots");
+    const stage = document.getElementById("stage");
+    const backArrow = document.getElementById("backArrow");
     const hintText = document.getElementById("hintText");
+    const dots = document.getElementById("dots");
     const rsvpButton = document.getElementById("rsvpButton");
     const formScreen = document.getElementById("formScreen");
     const formBackBtn = document.getElementById("formBackBtn");
     const rsvpForm = document.getElementById("rsvpForm");
     const formStatus = document.getElementById("formStatus");
-
-    function buildCards() {
-      stack.innerHTML = "";
-
-      cards.forEach((card, index) => {
-        const cardEl = document.createElement("div");
-        cardEl.className = "card";
-        cardEl.dataset.index = index;
-
-        cardEl.innerHTML = `
-          <img
-            src="${card.src}"
-            alt="${card.alt}"
-            draggable="false"
-            onerror="this.outerHTML='<div class=&quot;missing&quot;><div><strong>Image missing</strong><br>${card.src}<br><br>Check the file name and folder path.</div></div>'"
-          />
-        `;
-
-        stack.appendChild(cardEl);
-      });
-    }
 
     function buildDots() {
       dots.innerHTML = "";
@@ -485,135 +501,138 @@
       });
     }
 
-    function updateStack() {
-      const cardEls = document.querySelectorAll(".card");
+    function renderCard() {
+      const card = cards[currentIndex];
 
-      cardEls.forEach((cardEl) => {
-        const index = Number(cardEl.dataset.index);
-        const offset = index - currentIndex;
+      stage.style.display = "flex";
+      formScreen.classList.remove("show");
 
-        cardEl.className = "card";
+      rsvpButton.classList.toggle("show", currentIndex === cards.length - 1);
+      backArrow.classList.toggle("show", currentIndex > 0);
 
-        if (offset === 0) {
-          cardEl.classList.add("active");
-          cardEl.style.transform = "translateX(0) translateY(0) scale(1) rotate(0deg)";
-          cardEl.style.opacity = "1";
-          cardEl.style.pointerEvents = "auto";
-        } else if (offset === 1) {
-          cardEl.classList.add("next-1");
-          cardEl.style.pointerEvents = "none";
-        } else if (offset === 2) {
-          cardEl.classList.add("next-2");
-          cardEl.style.pointerEvents = "none";
-        } else if (offset === 3) {
-          cardEl.classList.add("next-3");
-          cardEl.style.pointerEvents = "none";
-        } else if (offset < 0) {
-          cardEl.classList.add("prev");
-        } else {
-          cardEl.classList.add("hidden-card");
-        }
-      });
+      hintText.style.display = "block";
+      dots.style.display = "flex";
+
+      hintText.textContent =
+        currentIndex === cards.length - 1
+          ? "tap RSVP to respond"
+          : "tap card to open";
+
+      if (card.split) {
+        stage.innerHTML = `
+          <div class="card-shell" id="activeCard" role="button" tabindex="0" aria-label="Open card">
+            <div class="split-card">
+              <img class="split-base" src="${card.src}" alt="" draggable="false">
+              <div class="flap flap-left">
+                <img src="${card.src}" alt="${card.alt}" draggable="false"
+                  onerror="this.closest('.card-shell').innerHTML='<div class=&quot;missing&quot;><div><strong>Image missing</strong><br>${card.src}<br><br>Check the file name and folder path.</div></div>'">
+              </div>
+              <div class="flap flap-right">
+                <img src="${card.src}" alt="" draggable="false">
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        stage.innerHTML = `
+          <div class="card-shell" id="activeCard" role="button" tabindex="0" aria-label="Open card">
+            <img
+              class="whole-card"
+              src="${card.src}"
+              alt="${card.alt}"
+              draggable="false"
+              onerror="this.outerHTML='<div class=&quot;missing&quot;><div><strong>Image missing</strong><br>${card.src}<br><br>Check the file name and folder path.</div></div>'"
+            />
+          </div>
+        `;
+      }
+
+      const activeCard = document.getElementById("activeCard");
+
+      if (activeCard) {
+        activeCard.addEventListener("click", openCurrentCard);
+        activeCard.addEventListener("keydown", function(event) {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openCurrentCard();
+          }
+        });
+      }
 
       buildDots();
-
-      const isLastCard = currentIndex === cards.length - 1;
-      rsvpButton.classList.toggle("show", isLastCard);
-
-      hintText.innerHTML = isLastCard
-        ? "swipe right to go back<br>or tap RSVP"
-        : currentIndex === 0
-          ? "swipe left to open"
-          : "swipe left to continue<br>swipe right to go back";
     }
 
-    function goNext() {
-      if (currentIndex < cards.length - 1) {
-        currentIndex += 1;
-        updateStack();
+    function openCurrentCard() {
+      if (isAnimating) return;
+
+      if (currentIndex === cards.length - 1) {
+        return;
+      }
+
+      isAnimating = true;
+
+      const card = cards[currentIndex];
+      const activeCard = document.getElementById("activeCard");
+
+      if (!activeCard) {
+        isAnimating = false;
+        return;
+      }
+
+      if (card.split) {
+        activeCard.classList.add("opening");
+
+        setTimeout(() => {
+          activeCard.classList.add("exit");
+        }, 620);
+
+        setTimeout(() => {
+          currentIndex += 1;
+          isAnimating = false;
+          renderCard();
+        }, 980);
+      } else {
+        activeCard.classList.add("exit");
+
+        setTimeout(() => {
+          currentIndex += 1;
+          isAnimating = false;
+          renderCard();
+        }, 300);
       }
     }
 
     function goBack() {
+      if (isAnimating) return;
+
+      if (formScreen.classList.contains("show")) {
+        closeForm();
+        return;
+      }
+
       if (currentIndex > 0) {
         currentIndex -= 1;
-        updateStack();
-      }
-    }
-
-    function getActiveCard() {
-      return document.querySelector(".card.active");
-    }
-
-    function onPointerDown(event) {
-      const activeCard = getActiveCard();
-      if (!activeCard || formScreen.classList.contains("show")) return;
-
-      isDragging = true;
-      startX = event.clientX || event.touches?.[0]?.clientX || 0;
-      currentX = startX;
-
-      activeCard.classList.add("swiping");
-    }
-
-    function onPointerMove(event) {
-      if (!isDragging) return;
-
-      const activeCard = getActiveCard();
-      if (!activeCard) return;
-
-      currentX = event.clientX || event.touches?.[0]?.clientX || 0;
-      const diffX = currentX - startX;
-      const rotate = diffX / 22;
-
-      activeCard.style.transform = `translateX(${diffX}px) rotate(${rotate}deg)`;
-    }
-
-    function onPointerUp() {
-      if (!isDragging) return;
-
-      const activeCard = getActiveCard();
-      const diffX = currentX - startX;
-      const threshold = 85;
-
-      isDragging = false;
-
-      if (activeCard) {
-        activeCard.classList.remove("swiping");
-      }
-
-      if (diffX < -threshold) {
-        goNext();
-      } else if (diffX > threshold) {
-        goBack();
-      } else {
-        updateStack();
+        renderCard();
       }
     }
 
     function openForm() {
-      stackWrap.style.display = "none";
+      stage.style.display = "none";
       rsvpButton.classList.remove("show");
       hintText.style.display = "none";
       dots.style.display = "none";
+      backArrow.classList.add("show");
       formScreen.classList.add("show");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function closeForm() {
       formScreen.classList.remove("show");
-      stackWrap.style.display = "flex";
-      hintText.style.display = "block";
-      dots.style.display = "flex";
-      updateStack();
+      renderCard();
     }
 
-    stackWrap.addEventListener("pointerdown", onPointerDown);
-    stackWrap.addEventListener("pointermove", onPointerMove);
-    stackWrap.addEventListener("pointerup", onPointerUp);
-    stackWrap.addEventListener("pointercancel", onPointerUp);
-
     rsvpButton.addEventListener("click", openForm);
+    backArrow.addEventListener("click", goBack);
     formBackBtn.addEventListener("click", closeForm);
 
     rsvpForm.addEventListener("submit", async function(event) {
@@ -648,8 +667,7 @@
       }
     });
 
-    buildCards();
-    updateStack();
+    renderCard();
   </script>
 </body>
 </html>
