@@ -285,107 +285,6 @@
       display: inline-flex;
     }
 
-    .form-screen {
-      display: none;
-      width: 100%;
-      max-width: 430px;
-      background: var(--paper);
-      color: var(--ink);
-      border-radius: 20px;
-      box-shadow: 0 24px 70px rgba(0,0,0,0.48);
-      padding: 28px;
-      animation: cardEnter 360ms ease both;
-    }
-
-    .form-screen.show {
-      display: block;
-    }
-
-    .form-screen h1 {
-      margin: 0 0 8px;
-      font-size: 2rem;
-      font-weight: 400;
-      text-align: center;
-    }
-
-    .form-screen p {
-      margin: 0 0 22px;
-      color: #725f56;
-      line-height: 1.5;
-      text-align: center;
-      font-size: 0.95rem;
-    }
-
-    .field {
-      margin-bottom: 16px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 7px;
-      font-family: Arial, Helvetica, sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 0.68rem;
-      color: #561f29;
-    }
-
-    input,
-    select,
-    textarea {
-      width: 100%;
-      border: 1px solid rgba(36, 24, 23, 0.18);
-      background: rgba(255,255,255,0.48);
-      border-radius: 12px;
-      padding: 13px 12px;
-      font: inherit;
-      color: var(--ink);
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 92px;
-    }
-
-    .form-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .form-actions button {
-      flex: 1;
-      appearance: none;
-      border-radius: 999px;
-      border: 1px solid rgba(36, 24, 23, 0.2);
-      padding: 13px 16px;
-      font-family: Arial, Helvetica, sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.11em;
-      font-size: 0.72rem;
-      cursor: pointer;
-    }
-
-    .submit-btn {
-      background: var(--red);
-      color: var(--paper);
-      border-color: var(--red);
-    }
-
-    .back-btn {
-      background: transparent;
-      color: var(--ink);
-    }
-
-    .status {
-      margin-top: 14px;
-      text-align: center;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.78rem;
-      color: #561f29;
-      line-height: 1.4;
-    }
-
     .missing {
       width: 100%;
       min-height: 220px;
@@ -434,42 +333,11 @@
     </div>
 
     <div class="dots" id="dots"></div>
-
-    <section class="form-screen" id="formScreen" aria-label="RSVP form">
-      <h1>Kindly Reply</h1>
-      <p>Please submit your RSVP by the third of July.</p>
-
-      <form id="rsvpForm" action="https://formspree.io/f/YOUR_ID_HERE" method="POST">
-        <div class="field">
-          <label for="name">Your name</label>
-          <input id="name" name="name" type="text" autocomplete="name" required />
-        </div>
-
-        <div class="field">
-          <label for="attending">Will you be attending?</label>
-          <select id="attending" name="attending" required>
-            <option value="">Choose one</option>
-            <option value="Gratefully accepts">Gratefully accepts</option>
-            <option value="Respectfully declines">Respectfully declines</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="notes">Food allergies / notes</label>
-          <textarea id="notes" name="notes" placeholder="Optional"></textarea>
-        </div>
-
-        <div class="form-actions">
-          <button class="back-btn" id="formBackBtn" type="button">Back</button>
-          <button class="submit-btn" type="submit">Submit</button>
-        </div>
-
-        <div class="status" id="formStatus"></div>
-      </form>
-    </section>
   </main>
 
   <script>
+    const TALLY_LINK = "https://tally.so/r/NpM0O0";
+
     const cards = [
       {
         src: "assets/invite/01-name-strip.png",
@@ -505,10 +373,6 @@
     const hintText = document.getElementById("hintText");
     const dots = document.getElementById("dots");
     const rsvpButton = document.getElementById("rsvpButton");
-    const formScreen = document.getElementById("formScreen");
-    const formBackBtn = document.getElementById("formBackBtn");
-    const rsvpForm = document.getElementById("rsvpForm");
-    const formStatus = document.getElementById("formStatus");
 
     function buildDots() {
       dots.innerHTML = "";
@@ -523,9 +387,6 @@
 
     function renderCard() {
       const card = cards[currentIndex];
-
-      stage.style.display = "flex";
-      formScreen.classList.remove("show");
 
       rsvpButton.classList.toggle("show", currentIndex === cards.length - 1);
       backArrow.classList.toggle("show", currentIndex > 0);
@@ -625,67 +486,18 @@
     function goBack() {
       if (isAnimating) return;
 
-      if (formScreen.classList.contains("show")) {
-        closeForm();
-        return;
-      }
-
       if (currentIndex > 0) {
         currentIndex -= 1;
         renderCard();
       }
     }
 
-    function openForm() {
-      stage.style.display = "none";
-      rsvpButton.classList.remove("show");
-      hintText.style.display = "none";
-      dots.style.display = "none";
-      backArrow.classList.add("show");
-      formScreen.classList.add("show");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    function openTally() {
+      window.open(TALLY_LINK, "_blank");
     }
 
-    function closeForm() {
-      formScreen.classList.remove("show");
-      renderCard();
-    }
-
-    rsvpButton.addEventListener("click", openForm);
+    rsvpButton.addEventListener("click", openTally);
     backArrow.addEventListener("click", goBack);
-    formBackBtn.addEventListener("click", closeForm);
-
-    rsvpForm.addEventListener("submit", async function(event) {
-      event.preventDefault();
-
-      const formAction = rsvpForm.getAttribute("action");
-
-      if (formAction.includes("YOUR_ID_HERE")) {
-        formStatus.textContent = "RSVP form is not connected yet. Add your Formspree endpoint first.";
-        return;
-      }
-
-      formStatus.textContent = "Submitting...";
-
-      try {
-        const response = await fetch(formAction, {
-          method: "POST",
-          body: new FormData(rsvpForm),
-          headers: {
-            "Accept": "application/json"
-          }
-        });
-
-        if (response.ok) {
-          formStatus.textContent = "Thank you. Your RSVP has been received.";
-          rsvpForm.reset();
-        } else {
-          formStatus.textContent = "Something went wrong. Please try again.";
-        }
-      } catch (error) {
-        formStatus.textContent = "Something went wrong. Please check your connection and try again.";
-      }
-    });
 
     renderCard();
   </script>
